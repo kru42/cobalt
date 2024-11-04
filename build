@@ -1,0 +1,14 @@
+#!/bin/sh
+# Build targeting the artifacts stage
+docker buildx build -t cobaltos-build --target artifacts .
+
+# Create a temporary container
+docker create --name temp cobaltos-build sh
+
+# Copy the files
+docker cp temp:/bzImage .
+docker cp temp:/initramfs.cpio.gz .
+
+# Clean up the temporary container
+docker rm temp
+
